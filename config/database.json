@@ -1,0 +1,8 @@
+{
+  "mare_staging": {
+    "host": "35.185.68.16",
+    "user": "mare",
+    "password": "mare123@",
+    "database": "mare"
+  }
+}
