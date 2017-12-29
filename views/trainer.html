@@ -63,17 +63,69 @@
 <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 <script>
-    let trainer = {chat:{customer_id:1,trainer_id:1}};
-    let json = JSON.stringify(trainer);
+    let data = {
+        "relation": "connected",
+        "point": "196",
+        "message": null,
+        "can_chat": true,
+        "sender": "trainer",
+        "customer": {
+            "id": 248,
+            "fb_id": null,
+            "avatar": "248_1514452761.jpg",
+            "name": "Serenity Frami IV",
+            "email": "mjohnston@example.net",
+            "password": "$2y$10$6m08zl75/JyCqwgZt9Y0H.ISi2xetCjTeqzCw62gJhDSLhEwcauIK",
+            "gender": "female",
+            "status": "active",
+            "birth_year": 1957,
+            "customer_weight": "51",
+            "customer_height": "173",
+            "push_status": "off",
+            "logged_at": "2017-12-29 13:32:57",
+            "access_token": "W6OabgslpC8hZTpJnsfmFeVTsIsbwTbkn9tOcwtte7ex3ykHLlyupRFHGb65",
+            "created_at": "2017-12-28 18:14:49",
+            "updated_at": "2017-12-29 13:32:57",
+            "deleted_at": null,
+            "password_raw": null,
+            "device_token": null
+        },
+        "trainer": {
+            "id": 54,
+            "fb_id": null,
+            "avatar": "54_1514452464.jpg",
+            "name": "Earnest Feest DVM",
+            "email": "khalil.reynolds@example.net",
+            "password": "$2y$10$6rCzf1BzRdsOkuPZWDE3KuKaUHB1J.bOgYQAK1HCasfPFXwIOtnXu",
+            "status": "active",
+            "gender": "male",
+            "pr_content": "Recusandae saepe provident aut consequuntur quia eos molestias et. Vel ducimus et architecto veniam et consequatur ipsam quia. Eum in similique voluptas eum architecto. Quos dignissimos praesentium et unde. Nihil dolor id molestias error nemo. Qui dolores excepturi enim odio.",
+            "max_customer_training": 37,
+            "logged_at": "2017-12-29 16:06:14",
+            "access_token": "3PHNUKNJT7fJmkGjKnQcXnC8ULJfOm7PwgdvkcJcgrkzqJFqBF9BI97lrX3y",
+            "created_at": "2017-12-28 18:14:17",
+            "updated_at": "2017-12-29 16:06:14",
+            "deleted_at": null,
+            "password_raw": null,
+            "push_status": "off",
+            "device_token": null,
+            "is_busy": "0"
+        },
+    };
+    let json = JSON.stringify(data);
     var socket = io("http://localhost:3000?data=" + json);
 
     $(function () {
+        var channel = 'message_' + data.customer.id + '_' + data.trainer.id;
+        console.log(channel);
+
         $('form').submit(function () {
-            socket.emit('chat_message', $('#msg').val());
+            socket.emit(channel, $('#msg').val());
+            console.log('trainer sent');
             $('#msg').val('');
             return false;
         });
-        socket.on('chat_message', function (msg) {
+        socket.on(channel, function (msg) {
             $('#messages').append($('<li>').text(msg));
             window.scrollTo(0, document.body.scrollHeight);
         });

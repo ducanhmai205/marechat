@@ -1,6 +1,5 @@
 const EVENT_CONNECTION = 'connection';
 const EVENT_DISCONNECT = 'disconnect';
-const EVENT_MESSAGE = 'chat_message';
 const chatRepo = require('../repo/chat.repo');
 
 /*
@@ -25,17 +24,27 @@ let onDisconnectEvent = function (socket) {
  Client gửi tin nhắn cho một client khác
  */
 let onMessageEvent = function (socket, io) {
-    socket.on(EVENT_MESSAGE, function (msg) {
+    let data = JSON.parse(socket.handshake.query.data);
+    let channel = 'message_' + data.customer.id + '_' + data.trainer.id;
+
+    socket.on(channel, function (msg) {
         // store chat
-        io.emit(EVENT_MESSAGE, msg);
+        createChat(data, msg);
+        io.emit(channel, msg);
     });
 };
 
 /*
  Create chat
  */
-function createChat(socket) {
-    let query = JSON.parse(socket.handshake.query.data);
-    let chat = query.chat;
+function createChat(data, msg) {
+    let chat = {
+        customer_id: data.customer.id,
+        trainer_id: data.trainer.id,
+        type: 'text',
+        content: msg,
+        sender: data.sender
+    };
+
     chatRepo.createChat(chat);
 }
