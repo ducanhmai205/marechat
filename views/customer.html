@@ -67,6 +67,7 @@
     let data = {
         "sender": "customer",
         "customer": {
+            "id": 248,
         },
         "trainer": {
             "id": 54,
@@ -79,13 +80,14 @@
         var channel = 'message_' + data.customer.id + '_' + data.trainer.id;
 
         $('form').submit(function () {
+            $('#messages').append($('<li>').text($('#msg').val()));
             socket.emit(channel, $('#msg').val());
             $('#msg').val('');
             return false;
         });
-        socket.on(channel, function (msg, type) {
-            if (type == 'trainer') {
-                $('#messages').append($('<li>').text(msg));
+        socket.on(channel, function (response) {
+            if (response.sender == 'trainer') {
+                $('#messages').append($('<li>').text(response.message));
                 window.scrollTo(0, document.body.scrollHeight);
             }
         });

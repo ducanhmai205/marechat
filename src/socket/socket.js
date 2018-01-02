@@ -31,7 +31,8 @@ let onMessageEvent = function (socket, io) {
         // store chat
         createChat(data, msg);
 
-        io.emit(channel, msg, data.sender);
+        var response = { sender: data.sender, message: msg };
+        io.emit(channel, response);
     });
 };
 
