@@ -30,7 +30,8 @@ let onMessageEvent = function (socket, io) {
     socket.on(channel, function (msg) {
         // store chat
         createChat(data, msg);
-        io.emit(channel, msg);
+
+        io.emit(channel, msg, data.sender);
     });
 };
 
