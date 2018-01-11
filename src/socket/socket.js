@@ -26,6 +26,7 @@ let onDisconnectEvent = function (socket) {
 let onMessageEvent = function (socket, io) {
     let data = JSON.parse(socket.handshake.query.data);
     let channel = 'message_' + data.customer.id + '_' + data.trainer.id;
+    console.log(channel);
 
     socket.on(channel, function (msg) {
         // store chat
